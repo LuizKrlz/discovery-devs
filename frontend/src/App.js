@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import api from "./services/api";
 
 import "./global.css";
 import "./App.css";
 import "./Sidebar.css";
 import "./Main.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import DevItem from "./components/DevItem";
 import DevForm from "./components/DevForm";
@@ -26,15 +28,17 @@ function App() {
 
   async function handleAddDev(data) {
     try {
-      const response = await api.post("/devs");
+      const response = await api.post("/devs", data);
       setDevs([...devs, response.data]);
+      toast.success("User has been added");
     } catch (error) {
-      alert(error);
+      toast.error("Usuer not added or not found");
     }
   }
 
   return (
     <div id="app">
+      <ToastContainer />
       <aside>
         <strong>Cadastrar</strong>
         <DevForm onSubmit={handleAddDev} />

@@ -11,6 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import api from "../../services/api";
 
 function Main({ navigation }) {
+  const [techs, setTechs] = useState("");
   const [devs, setDevs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(null);
 
@@ -40,13 +41,15 @@ function Main({ navigation }) {
     const { latitude, longitude } = currentRegion;
 
     const respose = await api.get("/search", {
-      latitude,
-      longitude,
-      techs: "ReactJS"
+      params: {
+        latitude,
+        longitude,
+        techs: techs
+      }
     });
 
-    console.log(respose.data.devs);
     setDevs(respose.data.devs);
+    setTechs("");
   }
 
   function handleRegionChanged(region) {
@@ -102,6 +105,8 @@ function Main({ navigation }) {
           autoCapitalize="words"
           autoCapitalize="words"
           autoCorrect={false}
+          value={techs}
+          onChangeText={setTechs}
         />
 
         <TouchableOpacity style={styles.loadButton} onPress={loadDevs}>
